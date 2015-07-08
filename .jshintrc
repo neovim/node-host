@@ -1,0 +1,17 @@
+{
+    "asi": true,
+    "bitwise": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "expr": true,
+    "freeze": true,
+    "immed": true,
+    "latedef": true,
+    "noarg": true,
+    "node": true,
+    "nonew": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": true
+}
