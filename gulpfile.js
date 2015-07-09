@@ -9,7 +9,7 @@ var gulp = require('gulp'),
 
     PATH = {
         src: [ 'index.js', 'gulpfile.js', 'lib/**/*.js' ],
-        test: 'test/**/*.js'
+        test: 'test/*.js'
     }
 
 if ( process.env.NODE_ENV !== 'production' ) {
@@ -22,26 +22,12 @@ if ( process.env.NODE_ENV !== 'production' ) {
     tldr = require('mocha-tldr-reporter')
 }
 
-gulp.task( 'default', [ 'watch' ] )
+gulp.task( 'default', [ 'checkstyle', 'test', 'watch' ] )
 
-gulp.task( 'test', function( done ) {
-    gulp.src( PATH.src )
-                .pipe( plumber() )
-        .pipe( istanbul({
-            includeUntested: true
-        }) )
-        .pipe( istanbul.hookRequire() )
-        .on( 'finish', function() {
-            gulp.src( PATH.test )
-                .pipe( plumber() )
-                .pipe( mocha({ reporter: tldr }) )
-                .pipe( plumber() )
-                .pipe( istanbul.writeReports({
-                    reporters: [ 'html' ]
-                }) )
-                .pipe( plumber() )
-                .on( 'end', done )
-        })
+gulp.task( 'test', function() {
+    return gulp.src( PATH.test )
+        .pipe( plumber() )
+        .pipe( mocha({ reporter: tldr }) )
 })
 
 gulp.task( 'checkstyle', function() {

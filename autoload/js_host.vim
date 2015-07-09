@@ -1,5 +1,5 @@
 function! js_host#RequireJSHost(host)
-  let plugin_host = expand('<sfile>:p:h').'/index.js'
+  let plugin_host = g:node_host_dir . '/index.js'
   let args = [plugin_host]
   try
     return rpcstart(a:host.orig_name, args)
