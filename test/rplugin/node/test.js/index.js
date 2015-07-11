@@ -7,10 +7,10 @@ plugin.commandSync('JSHostTestCmd', {
     range: '',
     nargs: '*',
 }, function( nvim, args, range ) {
-    if ( args[0] === 'can haz response?') {
+    nvim.setCurrentLine('A line, for your troubles')
+    if ( args[0] === 'canhazresponse?') {
         throw new Error('no >:(')
     }
-    return [args, range]
 })
 
 plugin.autocmdSync('BufEnter', {
