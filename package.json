@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "lodash": "^3.10.0",
-    "neovim-client": "^1.0.4"
+    "neovim-client": "^1.0.5"
   }
 }
