@@ -8,7 +8,7 @@ function! js_host#RequireJSHost(host)
   endtry
   throw 'Failed to load Node host. You can try to see what happened '.
         \ 'by starting Neovim with the environment variable '.
-        \ '$NVIM_JS_DEBUG set to a file and opening '.
+        \ '$NEOVIM_JS_DEBUG set to a file and opening '.
         \ 'the generated log file. Also, the host stderr will be available '.
         \ 'in Neovim log, so it may contain useful information. '.
         \ 'See also ~/.nvimlog.'
