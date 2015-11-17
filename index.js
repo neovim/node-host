@@ -70,7 +70,7 @@ attach( process.stdout, process.stdin, function( err, nvim ) {
             return res.send( plugin ? plugin.specs : [] )
         } else {
             ret = callHandler( nvim, method, args, true )
-            ret instanceof Error ? res.send( ret.message, true ) : res.send( ret || null )
+            ret instanceof Error ? res.send( ret.message, true ) : res.send( ret === undefined ? null : ret )
         }
     })
 
