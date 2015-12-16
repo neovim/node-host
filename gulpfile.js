@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    istanbul,
     jscs,
     jshint,
     mocha,
@@ -13,7 +12,6 @@ var gulp = require('gulp'),
     }
 
 if ( process.env.NODE_ENV !== 'production' ) {
-    istanbul = require('gulp-istanbul')
     jscs = require('gulp-jscs')
     jshint = require('gulp-jshint')
     mocha = require('gulp-mocha')
