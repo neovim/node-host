@@ -36,7 +36,8 @@
     "temp": "^0.8.3"
   },
   "dependencies": {
-    "lodash": "^3.10.0",
-    "neovim-client": "^1.0.5"
+    "lodash.defaults": "^3.1.2",
+    "lodash.omit": "^3.1.0",
+    "neovim-client": "^1.0.7"
   }
 }
