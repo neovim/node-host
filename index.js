@@ -27,30 +27,31 @@ function loadPlugin( filename ) {
     }
 }
 
-function callHandler( nvim, method, args, isRequest ) {
+function callHandler( nvim, method, args, reqCb ) {
     var procInfo = method.split(':'),
         filename = procInfo[0],
         type = procInfo[1],
         procName = '"' + procInfo.slice(2).join(' ') + '"',
         plugin = loadPlugin( filename ),
-        reqType = isRequest ? 'request' : 'notification'
+        reqType = reqCb ? 'request' : 'notification',
+        reqCb = setImmediate.bind( null, reqCb || function() {} )
 
     if ( plugin === null ) {
-        return new Error('Error loading plugin')
+        reqCb( new Error('Error loading plugin') )
     }
 
     if ( typeof plugin.handlers[ method ] !== 'function' ) {
         debug('ERROR: no handler for', type,  '"' + procName + '" in', filename)
-        return new Error( fmt( 'No', reqType, 'handler for', type, procName ) )
+        reqCb( new Error( fmt( 'No', reqType, 'handler for', type, procName ) ) )
     }
 
     try {
-        return plugin.handlers[ method ].apply( nvim, [].concat( nvim, args ) )
+        plugin.handlers[ method ].apply(  nvim, [].concat( nvim, args, reqCb ) )
     } catch ( err ) {
         debug('ERROR in', reqType, 'handler for', type, procName,
               'in', filename, err.stack)
-        return new Error( fmt( 'Error in', reqType, 'handler for', type,
-                               procName + ':', err.message ) )
+        reqCb( new Error( fmt( 'Error in', reqType, 'handler for', type,
+                               procName + ':', err.message ) ) )
     }
 }
 
@@ -62,15 +63,16 @@ attach( process.stdout, process.stdin, function( err, nvim ) {
     }
 
     nvim.on( 'request', function( method, args, res ) {
-        var plugin,
-            ret
+        var plugin
 
         if ( method === 'specs' ) {
             plugin = loadPlugin( args[0] )
-            return res.send( plugin ? plugin.specs : [] )
+            res.send( plugin ? plugin.specs : [] )
         } else {
-            ret = callHandler( nvim, method, args, true )
-            ret instanceof Error ? res.send( ret.message, true ) : res.send( ret === undefined ? null : ret )
+            callHandler( nvim, method, args, function( err, plugRes ) {
+                err ? res.send( err.toString(), true )
+                    : res.send( plugRes === undefined ? null : plugRes )
+            })
         }
     })
 

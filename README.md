@@ -28,23 +28,35 @@ function incrementCalls() {
 plugin.commandSync('Cmd', {
     range: '',
     nargs: '*',
-}, function( nvim, args, range ) {
-    incrementCalls()
-    nvim.setCurrentLine(
-        fmt('Command: Called', numCalls, 'times, args:', args, 'range:', range) )
+}, function( nvim, args, range, cb ) {
+    try {
+        incrementCalls()
+        nvim.setCurrentLine(
+            fmt('Command: Called', numCalls, 'times, args:', args, 'range:', range),
+            cb )
+    } catch ( err ) {
+        cb( err )
+    }
 })
 
 plugin.autocmdSync('BufEnter', {
     pattern: '*.js',
     eval: 'expand("<afile>")'
-}, function( nvim, filename ) {
-    incrementCalls()
-    nvim.setCurrentLine( fmt('Autocmd: Called', numCalls, 'times, file:', filename) )
+}, function( nvim, filename, cb ) {
+    try {
+        incrementCalls()
+        nvim.setCurrentLine(
+            fmt('Autocmd: Called', numCalls, 'times, file:', filename), cb )
+    } catch ( err ) {
+        cb( err )
+    }
 })
 
 plugin.function('Func', function( nvim, args ) {
-    incrementCalls()
-    nvim.setCurrentLine( fmt('Function: Called', numCalls, 'times, args:', args) )
+    try {
+        incrementCalls()
+        nvim.setCurrentLine( fmt('Function: Called', numCalls, 'times, args:', args) )
+    } catch ( err ) {}
 })
 ```
 
@@ -57,7 +69,7 @@ The following functions, available on the global `plugin` object, can be used to
 
 #### (command|function|autocmd)\[Sync](name, [opts], callback)
 
-If the `Sync` variant is used, Neovim will wait for the callback to return or throw an error.
+If the `Sync` variant is used, Neovim will wait for the plugin to return a response via the errback passed as the final argument to the plugin function.
 Otherwise, Neovim will continue execution immediately, ignoring any return values or errors.
 
 `name` is the name of the plugin, `opts` is an optional hash of options, and `callback` is a function that is called whenever the command, function, or autocmd, is triggered.
