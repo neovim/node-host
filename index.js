@@ -10,12 +10,18 @@ var attach = require('neovim-client'),
 // redirect stderr and set up debug output
 if ( process.env.NEOVIM_JS_DEBUG ) {
     debugOut = fs.createWriteStream( process.env.NEOVIM_JS_DEBUG, { flags: 'a' } )
-    process.stderr.write = debug.write
-    debug = function() {
-        var args = [].slice.call( arguments ),
-            sout = fmt.apply( null, [].concat( Date(), 'node-host:', args ) )
-        debugOut.write(sout + '\n')
-    }
+        .on( 'open', function() {
+            process.stderr.write = debug.write
+            debug = function() {
+                var args = [].slice.call( arguments ),
+                    sout = fmt.apply( null, [].concat( Date(), 'node-host:', args ) )
+                debugOut.write(sout + '\n')
+            }
+
+        })
+        .on( 'error', function( e ) {
+            process.stderr.write('node-host: Could not open NEOVIM_JS_DEBUG. ' + e)
+        })
 }
 
 function loadPlugin( filename ) {
