@@ -12,6 +12,7 @@
     "node": true,
     "nonew": true,
     "quotmark": "single",
+    "shadow": true,
     "undef": true,
     "unused": true
 }
