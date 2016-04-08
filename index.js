@@ -7,23 +7,6 @@ var attach = require('neovim-client'),
     debug = function() {},
     debugOut
 
-// redirect stderr and set up debug output
-if ( process.env.NEOVIM_JS_DEBUG ) {
-    debugOut = fs.createWriteStream( process.env.NEOVIM_JS_DEBUG, { flags: 'a' } )
-        .on( 'open', function() {
-            process.stderr.write = debug.write
-            debug = function() {
-                var args = [].slice.call( arguments ),
-                    sout = fmt.apply( null, [].concat( Date(), 'node-host:', args ) )
-                debugOut.write(sout + '\n')
-            }
-
-        })
-        .on( 'error', function( e ) {
-            process.stderr.write('node-host: Could not open NEOVIM_JS_DEBUG. ' + e)
-        })
-}
-
 function loadPlugin( filename ) {
     try {
         return new Plugin( filename, { stdout: debugOut } ).load()
@@ -61,26 +44,48 @@ function callHandler( nvim, method, args, reqCb ) {
     }
 }
 
-// stdio is reversed since it's from the perspective of Neovim
-attach( process.stdout, process.stdin, function( err, nvim ) {
-    if ( err ) {
-        debug( 'ERROR: could not connect to Neovim', err.stack )
-        process.exit(1)
-    }
-
-    nvim.on( 'request', function( method, args, res ) {
-        var plugin
-
-        if ( method === 'specs' ) {
-            plugin = loadPlugin( args[0] )
-            res.send( plugin ? plugin.specs : [] )
-        } else {
-            callHandler( nvim, method, args, function( err, plugRes ) {
-                err ? res.send( err.toString(), true )
-                    : res.send( plugRes === undefined ? null : plugRes )
-            })
+function init() {
+    // stdio is reversed since it's from the perspective of Neovim
+    attach( process.stdout, process.stdin, function( err, nvim ) {
+        if ( err ) {
+            debug( 'ERROR: could not connect to Neovim', err.stack )
+            process.exit(1)
         }
-    })
 
-    nvim.on( 'notification', callHandler.bind( null, nvim ) )
-})
+        nvim.on( 'request', function( method, args, res ) {
+            var plugin
+
+            if ( method === 'specs' ) {
+                plugin = loadPlugin( args[0] )
+                res.send( plugin ? plugin.specs : [] )
+            } else {
+                debug( method, args )
+                callHandler( nvim, method, args, function( err, plugRes ) {
+                    err ? res.send( err.toString(), true )
+                        : res.send( plugRes === undefined ? null : plugRes )
+                })
+            }
+        })
+
+        nvim.on( 'notification', callHandler.bind( null, nvim ) )
+    })
+}
+
+// redirect stderr and set up debug output
+if ( process.env.NEOVIM_JS_DEBUG ) {
+    debugOut = fs.createWriteStream( process.env.NEOVIM_JS_DEBUG, { flags: 'w' } )
+        .on( 'open', function() {
+            debug = function() {
+                var args = [].slice.call( arguments ),
+                    sout = fmt.apply( null, [].concat( Date(), 'node-host:', args ) )
+                debugOut.write(sout + '\n')
+            }
+            init()
+        })
+        .on( 'error', function( e ) {
+            debug('node-host: Could not open NEOVIM_JS_DEBUG. ' + e)
+            process.stderr.write('node-host: Could not open NEOVIM_JS_DEBUG. ' + e)
+        })
+} else {
+    init()
+}
