@@ -20,6 +20,10 @@ if ( process.env.NODE_ENV !== 'production' ) {
     tldr = require('mocha-tldr-reporter')
 }
 
+gulp.doneCallback = function ( err ) {
+    process.exit( err ? 1 : 0 )
+}
+
 gulp.task( 'default', [ 'checkstyle', 'test', 'watch' ] )
 
 gulp.task( 'test', function() {

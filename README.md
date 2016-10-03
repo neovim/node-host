@@ -1,5 +1,8 @@
 # node-host
 
+[![Build Status](https://travis-ci.org/neovim/node-host.png)](https://travis-ci.org/neovim/node-host)
+<br>
+
 ## Installation
 
 **Prerequisites:** You must have the `node` executable on your PATH and a copy of `npm`
