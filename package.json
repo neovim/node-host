@@ -38,6 +38,6 @@
   "dependencies": {
     "lodash.defaults": "^4.0.1",
     "lodash.omit": "^4.1.0",
-    "neovim-client": "^1.1.0"
+    "neovim-client": "^2.1.0"
   }
 }
