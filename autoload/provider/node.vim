@@ -71,8 +71,6 @@ endfunction
 let s:err = ''
 let s:prog = provider#node#Detect()
 
-let s:plugin_path = expand('<sfile>:p:h') . '/script_host.js'
-
 if empty(s:prog)
   let s:err = 'Cannot find the neovim-client node package. Try :CheckHealth'
 endif
