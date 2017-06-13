@@ -437,14 +437,14 @@ function! s:check_node() abort
 
   let host = provider#node#Detect()
   if empty(host)
-    call health#report_warn('Missing "neovim2" npm package.',
-          \ ['Run in shell: npm install -g neovim2',
+    call health#report_warn('Missing "neovim" npm package.',
+          \ ['Run in shell: npm install -g neovim',
           \  'Is the npm bin directory in $PATH?'])
     return
   endif
   call health#report_info('Host: '. host)
 
-  let latest_npm_cmd = has('win32') ? 'cmd /c npm info neovim2 --json' : 'npm info neovim2 --json'
+  let latest_npm_cmd = has('win32') ? 'cmd /c npm info neovim --json' : 'npm info neovim --json'
   let latest_npm = s:system(split(latest_npm_cmd))
   if s:shell_error || empty(latest_npm)
     call health#report_error('Failed to run: '. latest_npm_cmd,
@@ -471,11 +471,11 @@ function! s:check_node() abort
 
   if s:version_cmp(current_npm, latest_npm) == -1
     call health#report_warn(
-          \ printf('Package "neovim2" is out-of-date. Installed: %s, latest: %s',
+          \ printf('Package "neovim" is out-of-date. Installed: %s, latest: %s',
           \ current_npm, latest_npm),
-          \ ['Run in shell: npm update neovim2'])
+          \ ['Run in shell: npm update neovim'])
   else
-    call health#report_ok('Latest "neovim2" npm is installed: '. current_npm)
+    call health#report_ok('Latest "neovim" npm is installed: '. current_npm)
   endif
 endfunction
 
