@@ -1,4 +1,4 @@
-" The Ruby provider helper
+
 if exists('g:loaded_node_provider')
   finish
 endif
@@ -16,7 +16,6 @@ function! s:job_opts.on_stderr(chan_id, data, event)
 endfunction
 
 function! provider#node#Detect() abort
-  echomsg exepath('neovim-node-host')
   return exepath('neovim-node-host')
 endfunction
 
@@ -25,12 +24,24 @@ function! provider#node#Prog()
 endfunction
 
 function! provider#node#Require(host) abort
-  let args = ['node', provider#node#Prog()]
-  let node_plugins = remote#host#PluginsForHost(a:host.name)
+  if s:err != ''
+    echoerr s:err
+    return
+  endif
 
-  for plugin in node_plugins
-    call add(args, plugin.path)
-  endfor
+  let args = ['node']
+
+  if !empty($NVIM_NODE_HOST_DEBUG)
+    call add(args, '--inspect-brk')
+  endif
+
+  call add(args , provider#node#Prog())
+
+  " let node_plugins = remote#host#PluginsForHost(a:host.name)
+
+  " for plugin in node_plugins
+    " call add(args, plugin.path)
+  " endfor
 
   try
     let channel_id = jobstart(args, s:job_opts)
@@ -55,7 +66,7 @@ function! provider#node#Call(method, args)
 
   if !exists('s:host')
     try
-      let s:host = remote#host#Require('node-provider')
+      let s:host = remote#host#Require('node')
     catch
       let s:err = v:exception
       echohl WarningMsg
