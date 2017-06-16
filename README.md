@@ -1,7 +1,7 @@
 # node-host
 ## Installation
 
-**Prerequisites:** You must have the `node` executable (currently only 8.x is supported) on your PATH and a copy of `npm`
+**Prerequisites:** You must have the `node` executable (currently only 7.x is supported) on your PATH and a copy of `npm`
 
 1. Install this plugin using `vim-plug` or your favorite plugin manager
 2. Install `neovim` package globally: `npm install -g neovim`
