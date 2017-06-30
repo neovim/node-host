@@ -4,12 +4,12 @@
 **Prerequisites:** You must have the `node` executable (currently only 7.x is supported) on your PATH and a copy of `npm`
 
 1. Install this plugin using `vim-plug` or your favorite plugin manager
-2. Install `neovim` package globally: `npm install -g neovim`
+2. Install `neovim` package globally: `npm install -g neovim@next`
 
 ### Example config (vim-plug)
 ```vim
 call plug#begin()
-  Plug 'billyvg/node-host', { 'do': 'npm install -g neovim' }
+  Plug 'neovim/node-host', { 'branch': 'next', 'do': 'npm install -g neovim@next' }
 call plug#end()
 ```
 
