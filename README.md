@@ -1,18 +1,15 @@
-# Breaking Changes Incoming
-We will be introducing breaking changes in the near future. See the [new node-host](https://github.com/neovim/node-host/tree/next) and [new node-client](https://github.com/neovim/node-client/tree/next) for more information about the changes
-
 # node-host
 ## Installation
 
 **Prerequisites:** You must have the `node` executable (currently only 7.x is supported) on your PATH and a copy of `npm`
 
 1. Install this plugin using `vim-plug` or your favorite plugin manager
-2. Install `neovim` package globally: `npm install -g neovim@next`
+2. Install `neovim` package globally: `npm install -g neovim`
 
 ### Example config (vim-plug)
 ```vim
 call plug#begin()
-  Plug 'neovim/node-host', { 'branch': 'next', 'do': 'npm install -g neovim@next' }
+  Plug 'neovim/node-host', { 'do': 'npm install -g neovim' }
 call plug#end()
 ```
 
