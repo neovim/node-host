@@ -21,4 +21,4 @@ You *must* restart neovim after a `:UpdateRemotePlugins` before you can use your
 ## Writing plugins
 A plugin can either be a file or folder in the `rplugin/node` directory. If the plugin is a folder, the `main` script from `package.json` will be loaded.
 
-Please see the [neovim repository](https://github.com/billyvg/node-client) for documentation on how to write a plugin (API is currently a WIP)
+Please see the [neovim repository](https://github.com/neovim/node-client) for documentation on how to write a plugin (API is currently a WIP)
