@@ -1,3 +1,6 @@
+# Update
+This is no longer needed as it has been merged into neovim! https://github.com/neovim/neovim/pull/7458 🎉
+
 # node-host
 ## Installation
 
