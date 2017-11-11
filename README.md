@@ -1,5 +1,6 @@
 # Update
 This is no longer needed as it has been merged into neovim! https://github.com/neovim/neovim/pull/7458 🎉
+
 Please direct node client related issues to [neovim client repository](https://github.com/neovim/node-client).
 
 # node-host
