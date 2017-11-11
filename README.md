@@ -12,9 +12,9 @@ Please direct node client related issues to [neovim client repository](https://g
 
 ### ~~Example config (vim-plug)~~
 ```vim
-~~call plug#begin()~~
-  ~~Plug 'neovim/node-host', { 'do': 'npm install -g neovim' }~~
-~~call plug#end()~~
+call plug#begin()
+  Plug 'neovim/node-host', { 'do': 'npm install -g neovim' }
+call plug#end()
 ```
 
 ## Usage
